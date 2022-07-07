@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ public class AddAddressActivity extends AppCompatActivity {
     private Toolbar tToolbar;
     private EditText vName,vCity,vAddress,vCode, vNumber;
     private Button bAddress;
+
+    String name,city,address,code,number;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore firebaseDb;
@@ -52,42 +55,59 @@ public class AddAddressActivity extends AppCompatActivity {
         bAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name=vName.getText().toString();
-                String city=vCity.getText().toString();
-                String address=vAddress.getText().toString();
-                String code=vCode.getText().toString();
-                String number=vNumber.getText().toString();
-                String final_address="";
-                if(!name.isEmpty()){
-                    final_address+=name+", ";
-                }
-                if(!city.isEmpty()){
-                    final_address+=city+", ";
-                }
-                if(!address.isEmpty()){
-                    final_address+=address+", ";
-                }
-                if(!code.isEmpty()){
-                    final_address+=code+", ";
-                }
-                if(!number.isEmpty()){
-                    final_address+=number+", ";
-                }
-                Map<String,String> mMap=new HashMap<>();
-                mMap.put("address",final_address);
 
-                firebaseDb.collection("User").document(mAuth.getCurrentUser().getUid())
-                        .collection("Address").add(mMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(AddAddressActivity.this, "Address Added", Toast.LENGTH_SHORT).show();
-                            finish();
+                if(validDetails()) {
+                    String final_address = name+","+city+","+address+","+code+","+number;
+                    Map<String, String> mMap = new HashMap<>();
+                    mMap.put("address", final_address);
+
+                    firebaseDb.collection("User").document(mAuth.getCurrentUser().getUid())
+                            .collection("Address").add(mMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(AddAddressActivity.this, "Address Added", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
                         }
-                    }
-                });
-
+                    });
+                }
             }
         });
     }
+
+    private boolean validDetails() {
+
+        name=vName.getText().toString();
+        city=vCity.getText().toString();
+        address=vAddress.getText().toString();
+        code=vCode.getText().toString();
+        number=vNumber.getText().toString();
+
+        boolean valid=true;
+
+        if(name.isEmpty()){
+            vName.setError("Invalid Name");
+            valid=false;
+        }
+        if(city.isEmpty()){
+            vCity.setError("Invalid City");
+            valid=false;
+        }
+        if(address.isEmpty()){
+            vAddress.setError("Invalid email");
+            valid=false;
+        }
+        if(code.isEmpty()){
+            vCode.setError("Invalid Pincode");
+            valid=false;
+        }
+        if(number.isEmpty()){
+            vNumber.setError("Invalid phone number");
+            valid=false;
+        }
+
+        return valid;
+    }
+
 }

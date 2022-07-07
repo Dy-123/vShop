@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.vshop.adapters.AddressAdapter;
 import com.example.vshop.helperClasses.Address;
@@ -118,18 +120,35 @@ public class AddressActivity extends AppCompatActivity implements AddressAdapter
 
                 }
                 if(itemsList!=null && itemsList.size()>0){
-                    Intent intent=new Intent(AddressActivity.this,PaymentActivity.class);
-                    intent.putExtra("itemsList", (Serializable) itemsList);
-                    startActivity(intent);
-                }else{
-                    Intent intent=new Intent(AddressActivity.this,PaymentActivity.class);
-                    intent.putExtra("amount",amount);
-                    intent.putExtra("img_url",url);
-                    intent.putExtra("name",name);
-                    intent.putExtra("address",address);
 
-                    startActivity(intent);
-                    finish();
+                    if(address.length()!=0) {
+
+                        Intent intent = new Intent(AddressActivity.this, PaymentActivity.class);
+                        intent.putExtra("itemsList", (Serializable) itemsList);
+                        intent.putExtra("address",address);
+                        startActivity(intent);
+                        finish();
+
+                    }else{
+                        Toast.makeText(AddressActivity.this,"Address Missing",Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+
+                    if(address.length()!=0) {
+
+                        Intent intent = new Intent(AddressActivity.this, PaymentActivity.class);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("img_url", url);
+                        intent.putExtra("name", name);
+                        intent.putExtra("address", address);
+
+                        startActivity(intent);
+                        finish();
+
+                    }else{
+                        Toast.makeText(AddressActivity.this,"Address Missing",Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }

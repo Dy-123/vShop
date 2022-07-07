@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                 startActivity(intent);
+                                finish();
 
 
                             }else{
@@ -86,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     public void signUp(View view) {
         Intent intent=new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private boolean validDetails() {

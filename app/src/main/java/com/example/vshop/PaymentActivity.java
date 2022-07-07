@@ -1,5 +1,6 @@
 package com.example.vshop;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -10,7 +11,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vshop.helperClasses.Feature;
 import com.example.vshop.helperClasses.Item;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
@@ -18,7 +27,10 @@ import com.razorpay.PaymentResultListener;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,10 +42,20 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
     private double price,offer,shipping,totalAmount;
 
+    private FirebaseFirestore firebaseDb;
+    private FirebaseAuth mAuth;
+    String address;
+    String[] split;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+
+        firebaseDb = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        address = getIntent().getExtras().getString("address");
+        split = address.split(",");
 
         vPrice= findViewById(R.id.payment_price);
         vOffer= findViewById(R.id.payment_offer);
@@ -92,8 +114,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 //            options.put("theme.color", "#3399cc");
             options.put("currency", "INR");                                  // madatory
             options.put("amount", 100*totalAmount);  // pass amount in currency subunits   // madatory
-//            options.put("prefill.email", "gaurav.kumar@example.com");
-//            options.put("prefill.contact","9988776655");
+            options.put("prefill.email", mAuth.getCurrentUser().getEmail());
+            options.put("prefill.contact",split[4]);
 
 //            JSONObject retryObj = new JSONObject();
 //            retryObj.put("enabled", true);
@@ -110,8 +132,40 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
 
     @Override
     public void onPaymentSuccess(String response) {
+
+        String timeStamp = String.valueOf(TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
+
+        if(itemsList!=null &&  itemsList.size()>0){
+
+            for(Item item: itemsList){
+                Map<String, String> map = new HashMap<>();
+                map.put("name",item.getName());
+                map.put("price",String.valueOf(item.getPrice()));
+                map.put("imageUrl",item.getimageUrl());
+                map.put("time",timeStamp);
+                map.put("paymentId",response);
+                map.put("address",address);
+                firebaseDb.collection("Orders").document(mAuth.getCurrentUser().getUid()).collection("allOrder").add(map);
+            }
+
+        }
+        else{
+
+            Map<String, String> map = new HashMap<>();
+            map.put("name",getIntent().getExtras().getString("name"));
+            map.put("price",String.valueOf(getIntent().getDoubleExtra("amount",0.0)));
+            map.put("imageUrl",getIntent().getExtras().getString("img_url") );
+            map.put("time",timeStamp);
+            map.put("paymentId",response);
+            map.put("address",address);
+            firebaseDb.collection("Orders").document(mAuth.getCurrentUser().getUid()).collection("allOrder").add(map);
+
+        }
+
+
         Toast.makeText(this, "Order Successful", Toast.LENGTH_SHORT).show();
         finish();
+
     }
 
     @Override
