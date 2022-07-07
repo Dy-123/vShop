@@ -102,7 +102,7 @@ public class AddAddressActivity extends AppCompatActivity {
             vCode.setError("Invalid Pincode");
             valid=false;
         }
-        if(number.isEmpty()){
+        if(number.length()!=10){
             vNumber.setError("Invalid phone number");
             valid=false;
         }

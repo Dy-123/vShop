@@ -115,7 +115,13 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultL
             options.put("currency", "INR");                                  // madatory
             options.put("amount", 100*totalAmount);  // pass amount in currency subunits   // madatory
             options.put("prefill.email", mAuth.getCurrentUser().getEmail());
-            options.put("prefill.contact",split[4]);
+            options.put("prefill.contact","91"+split[4]);
+
+            JSONObject ReadOnly = new JSONObject();
+            ReadOnly.put("email", "true");
+            ReadOnly.put("contact", "true");
+            options.put("readonly", ReadOnly);
+
 
 //            JSONObject retryObj = new JSONObject();
 //            retryObj.put("enabled", true);
