@@ -87,15 +87,15 @@ public class RegisterActivity extends AppCompatActivity {
 
         boolean valid = true;
         if (TextUtils.isEmpty(email) || !email.contains(".") || !email.contains("@")) {
-            vEmail.setError("Enter a valid email");
+            vEmail.setError("Invalid email");
             valid = false;
         }
         if (TextUtils.isEmpty(password) ) {
-            vPassword.setError("Password is empty");
+            vPassword.setError("Invalid password");
             valid = false;
         }
         if(TextUtils.isEmpty(name)){
-            vName.setError("Enter a valid First Name");
+            vName.setError("Invalid Name");
             valid = false;
         }
         return valid;

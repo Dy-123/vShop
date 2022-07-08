@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vshop">
-        <activity android:name=".CartActivity"></activity>
-        <activity android:name=".PaymentActivity" />
+        <activity android:name=".CartActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".PaymentActivity" android:screenOrientation="portrait" />
         <activity
             android:name=".AddAddressActivity"
             android:label="@string/title_activity_add_address"
@@ -18,18 +18,22 @@
             android:theme="@style/Theme.Vshop.NoActionBar" />
         <activity
             android:name=".AddressActivity"
-            android:parentActivityName=".DetailActivity" />
+            android:parentActivityName=".DetailActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".DetailActivity"
-            android:parentActivityName=".HomeActivity" />
-        <activity android:name=".ItemsActivity" />
-        <activity android:name=".HomeActivity" />
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ItemsActivity" android:screenOrientation="portrait" />
+        <activity android:name=".HomeActivity" android:screenOrientation="portrait" />
         <activity
             android:name=".RegisterActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity" android:screenOrientation="portrait" />
 
         <meta-data
             android:name="com.razorpay.ApiKey"
