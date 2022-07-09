@@ -125,8 +125,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private void searchItem(String text) {
         if(!text.isEmpty()){
-            firebaseDb.collection("All").whereGreaterThanOrEqualTo("name",text).get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            text=text.toLowerCase();
+            firebaseDb.collection("All").whereArrayContains("search",text).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if(task.isSuccessful() && task.getResult()!=null){
