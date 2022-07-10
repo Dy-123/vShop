@@ -57,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
         tToolbar= findViewById(R.id.home_toolbar);
         setSupportActionBar(tToolbar);
+        getSupportActionBar().setTitle("vShop");
 
         itemsList=new ArrayList<>();
         rView=findViewById(R.id.home_search_recycler);
@@ -117,6 +118,11 @@ public class HomeActivity extends AppCompatActivity {
 
         if(item.getItemId()==R.id.cart){
             Intent intent=new Intent(HomeActivity.this,CartActivity.class);
+            startActivity(intent);
+        }
+
+        if(item.getItemId()==R.id.order){
+            Intent intent=new Intent(HomeActivity.this,OrderActivity.class);
             startActivity(intent);
         }
 
